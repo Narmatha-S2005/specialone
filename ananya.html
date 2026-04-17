@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday 💖</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+  color:white;
+  text-align:center;
+  overflow:hidden;
+  background: linear-gradient(270deg,#000,#200020,#000);
+  background-size:400% 400%;
+  animation:bg 10s infinite alternate;
+}
+@keyframes bg{
+  from{background-position:0%}
+  to{background-position:100%}
+}
+
+.screen{
+  display:none;
+  height:100vh;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  padding:20px;
+  opacity:0;
+  transition:1s;
+}
+.screen.active{
+  display:flex;
+  opacity:1;
+}
+
+button{
+  padding:12px 25px;
+  border:none;
+  border-radius:25px;
+  background:hotpink;
+  color:black;
+  font-size:18px;
+  margin-top:20px;
+}
+
+.glow{
+  animation:glow 1.5s infinite alternate;
+}
+@keyframes glow{
+  from{text-shadow:0 0 5px pink;}
+  to{text-shadow:0 0 25px hotpink;}
+}
+
+/* hearts */
+.heart{
+  position:absolute;
+  bottom:0;
+  animation:float 6s linear infinite;
+}
+@keyframes float{
+  to{transform:translateY(-100vh);}
+}
+
+/* note scroll (SLOW FIX) */
+#note{
+  position:absolute;
+  bottom:-100%;
+  width:100%;
+  animation:scroll 60s linear forwards;
+}
+@keyframes scroll{
+  from{bottom:-100%;}
+  to{bottom:100%;}
+}
+
+/* confetti */
+.confetti{
+  position:absolute;
+  width:8px;
+  height:8px;
+  background:yellow;
+  top:0;
+  animation:fall 3s linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(100vh) rotate(360deg);}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="song" src="music.mpeg" preload="auto"></audio>
+
+<!-- OPEN -->
+<div class="screen active">
+  <h1 class="glow">Tap Anywhere 💖</h1>
+</div>
+
+<!-- WISHES -->
+<div class="screen">
+  <h1 id="wish" class="glow"></h1>
+</div>
+
+<!-- STORY -->
+<div class="screen">
+  <h2 id="story"></h2>
+</div>
+
+<!-- NOTE BUTTON -->
+<div class="screen">
+  <h2>Read this 💌</h2>
+  <button onclick="showNote()">Open</button>
+</div>
+
+<!-- NOTE -->
+<div class="screen">
+  <div id="note">
+    <p>
+Happy Birthday chlm ❤️<br><br>
+Namma bonding romba special…<br><br>
+nenga chiththappa ah illana..🙂<br><br>
+namma boding vera mathiri poirukala<br><br>
+but its ok intha bonding atha vida nalla iruku<br><br>
+situationship ah kelvi patruka...<br><br>
+but first time feel pantra ..unga kita<br><br>
+sometimes nenga ennota bad memories la remain pantringa<br><br>
+ithuvum oru reason.. na ungala avoid pannathuku<br><br>
+nammala mathiriye mindset la oru bond kedaikurathu rare...<br><br>
+but enaku ketachuruku that's you..<br><br>
+evlo nal namma bonding irukunu enaku theriyathu<br><br>
+but irukura varaikum namma friendship ah enjoy pannalm ...<br><br>
+namma ellame share pantra mathiri namma bond innum<br><br>
+strong agala pola but strong airum<br><br>
+aprm unga harwork ku…<br><br>
+Ungaluku nalla job kandippa kidaikum 💯<br><br>
+aprm ennoda frd eppothu smile pannitu than irukanum<br><br>
+ithu ennoda strict order...<br><br>
+ungalukum worst situation vanthurukala..<br><br>
+sad ah irunthalo kova patalo sari airuma enna<br><br>
+athanala eppothum happy ah smile pannitu irukanum❤️<br><br>
+ethachum cringe ah solliruntha omit pannirunga...<br><br>
+ena ithellam na feel pani eluthiruka<br><br>
+MISS YOUUUUUUU....<br><br>
+Some bonds feel panna dhaan mudiyum ❤️<br><br>
+Once again Happy Birthday frndeyyyy.. 🎂
+    </p>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div class="screen">
+  <h1 class="glow">🎂 HAPPY BIRTHDAY ❤️</h1>
+  <button onclick="cutCake()">Cut Cake 🎂</button>
+  <h2 id="cake" style="display:none;">🎂🎉</h2>
+</div>
+
+<script>
+let screens=document.querySelectorAll(".screen");
+
+/* wishes */
+let wishes=[
+"Happy Birthday nga🎂",
+"Happy Birthday BRO 😎",
+"Happy Birthday CHITHTHAPPA 😊",
+"Happy Birthday CHLM💖",
+"Happy Birthday THANGOO💛"
+];
+
+/* story */
+let story=[
+"One day… Ungala na akka vittu pakathula patha…",
+"but pesanunu thonala",
+"Instagram la start aachu…namma conversation😊",
+"appo namma relationship enaku theriyathu",
+"so na konjo avoid panna",
+"aprm namma relationship ennanu therichuthu",
+"athavathu chiththappa nu😎,",
+"aprm pesuna problem illanu thonuchu",
+"atha pesa start panna",
+"Slow ah pesinom…",
+"vanga ponga la start pannom",
+"ipppo chlm ammu poitu iruku",
+"Bond build aachu…",
+"This is not love… but something special ❤️"
+];
+
+let i=0,j=0;
+
+/* SLOW TYPING FIX */
+function typeText(el,text,callback){
+  let k=0;
+  el.innerHTML="";
+  function type(){
+    if(k < text.length){
+      el.innerHTML += text.charAt(k);
+      k++;
+      setTimeout(type,80);
+    } else if(callback){
+      setTimeout(callback,2000);
+    }
+  }
+  type();
+}
+
+function start(){
+  let song = document.getElementById("song");
+  if(song){
+    song.play().catch(()=>{});
+  }
+
+  if(navigator.vibrate){
+    navigator.vibrate(100);
+  }
+
+  switchScreen(0,1);
+  showWishes();
+  hearts();
+}
+
+function switchScreen(a,b){
+  screens[a].classList.remove("active");
+  screens[b].classList.add("active");
+}
+
+function showWishes(){
+  typeText(document.getElementById("wish"),wishes[i],()=>{
+    i++;
+    if(i<wishes.length){
+      showWishes();
+    }else{
+      setTimeout(showStory,2000);
+    }
+  });
+}
+
+function showStory(){
+  switchScreen(1,2);
+  function next(){
+    typeText(document.getElementById("story"),story[j],()=>{
+      j++;
+      if(j<story.length){
+        next();
+      }else{
+        setTimeout(()=>switchScreen(2,3),2000);
+      }
+    });
+  }
+  next();
+}
+
+function showNote(){
+  switchScreen(3,4);
+  setTimeout(()=>switchScreen(4,5),60000);
+}
+
+/* CUT CAKE FIX */
+function cutCake(){
+  let cake = document.getElementById("cake");
+  cake.style.display="block";
+
+  if(navigator.vibrate){
+    navigator.vibrate(200);
+  }
+
+  confetti();
+}
+
+/* hearts */
+function hearts(){
+  setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerText="💖";
+    h.style.left=Math.random()*100+"%";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+  },400);
+}
+
+/* confetti (LESS LAG) */
+function confetti(){
+  setInterval(()=>{
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"%";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  },200);
+}
+
+/* TAP START */
+let started=false;
+document.body.addEventListener("click",function(){
+  if(!started){
+    start();
+    started=true;
+  }
+});
+</script>
+
+</body>
+</html>
